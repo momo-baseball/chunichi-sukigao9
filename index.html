@@ -199,6 +199,9 @@ const players = [
   "能戸輝夢",
   "三上愛介"
 ];
+  const photos = {
+  "土田龍空": "IMG_2394.jpeg"
+};
 
 let scores = {};
 
@@ -236,9 +239,12 @@ function showChoices() {
     card.className = "player";
 
     card.innerHTML =
-      '<div class="photo">⚾</div>' +
-      '<div class="name">' + player + '</div>';
-
+  '<div class="photo">' +
+  (photos[player]
+    ? '<img src="' + photos[player] + '" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">'
+    : '⚾') +
+  '</div>' +
+  '<div class="name">' + player + '</div>';
     card.onclick = function() {
 
       scores[player]++;
