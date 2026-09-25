@@ -1,16 +1,292 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>中日ドラゴンズ 好き顔9選</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>中日ドラゴンズ 好き顔9選</title>
+
+<style>
+
+body {
+  margin: 0;
+  background: #f5f7fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  text-align: center;
+  color: #222;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 25px 15px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+#round {
+  margin-bottom: 15px;
+  color: #888;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.player {
+  background: white;
+  border-radius: 18px;
+  padding: 10px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+
+.player:active {
+  transform: scale(0.96);
+}
+
+.photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #e5e5e5;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  overflow: hidden;
+}
+
+.name {
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+#result {
+  display: none;
+}
+
+.ranking {
+  background: white;
+  border-radius: 15px;
+  padding: 12px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+
+.rank {
+  font-size: 24px;
+  font-weight: bold;
+  width: 30px;
+}
+
+.result-photo {
+  width: 65px;
+  height: 65px;
+  background: #e5e5e5;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.result-name {
+  font-weight: bold;
+}
+
+button {
+  margin-top: 20px;
+  padding: 13px 28px;
+  border: none;
+  border-radius: 25px;
+  background: #222;
+  color: white;
+  font-size: 16px;
+}
+
+</style>
 </head>
 
 <body>
 
-  <h1>⚾ 中日ドラゴンズ 好き顔9選</h1>
+<div class="container">
 
-  <p>あなたの好きな顔を選んでね！</p>
+<div id="game">
+
+<h1>⚾ 中日ドラゴンズ<br>好き顔9選</h1>
+
+<p class="subtitle">
+あなたの好きな顔を選んでね！
+</p>
+
+<div id="round"></div>
+
+<div class="choices" id="choices"></div>
+
+</div>
+
+
+<div id="result">
+
+<h1>💙 好き顔9選 💙</h1>
+
+<p>あなたが選んだ選手TOP9！</p>
+
+<div id="ranking"></div>
+
+<button onclick="location.reload()">
+もう一度やる
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const players = [
+
+"中西聖輝",
+"櫻井頼之,
+"髙橋宏斗",
+"金丸夢斗",
+"松木平優太",
+"根尾昂",
+"福田幸之介",
+"吉田聖弥",
+"清水達也",
+"松山晋也",
+"梅津晃大",
+"草加勝",
+
+"石伊雄太",
+"木下拓哉",
+"宇佐見真吾",
+"山浅龍之介",
+
+"辻本倫太郎",
+"田中幹也",
+"高橋周平",
+"村松開人",
+"福永裕基",
+"石川昂弥",
+"土田龍空",
+"阿部寿樹",
+"山本泰寛",
+"津田啓史",
+"中村奈一輝",
+
+"岡林勇希",
+"大島洋平",
+"福元悠真",
+"ブライト健太",
+"上林誠知",
+"細川成也",
+"花田旭",
+"鵜飼航丞",
+"尾田剛樹",
+"川越誠司",
+"能戸輝夢",
+"三上愛介"
+
+];
+
+let scores = {};
+
+players.forEach(player => {
+  scores[player] = 0;
+});
+
+let round = 1;
+const maxRounds = 25;
+
+function getRandomPlayers() {
+  const shuffled = [...players].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 4);
+}
+
+function showChoices() {
+  document.getElementById("round").textContent =
+    round + " / " + maxRounds + " 回";
+
+  const choices = document.getElementById("choices");
+  choices.innerHTML = "";
+
+  const selected = getRandomPlayers();
+
+  selected.forEach(player => {
+    const card = document.createElement("div");
+    card.className = "player";
+
+    card.innerHTML = `
+      <div class="photo">⚾</div>
+      <div class="name">${player}</div>
+    `;
+
+    card.onclick = function() {
+      scores[player]++;
+
+      round++;
+
+      if (round > maxRounds) {
+        showResult();
+      } else {
+        showChoices();
+      }
+    };
+
+    choices.appendChild(card);
+  });
+}
+
+function showResult() {
+  document.getElementById("game").style.display = "none";
+  document.getElementById("result").style.display = "block";
+
+  const ranking = document.getElementById("ranking");
+  ranking.innerHTML = "";
+
+  const sorted = [...players].sort(
+    (a, b) => scores[b] - scores[a]
+  );
+
+  sorted.slice(0, 9).forEach((player, index) => {
+    const div = document.createElement("div");
+    div.className = "ranking";
+
+    div.innerHTML = `
+      <div class="rank">${index + 1}</div>
+      <div class="result-photo">⚾</div>
+      <div>
+        <div class="result-name">${player}</div>
+        <small>${scores[player]}票</small>
+      </div>
+    `;
+
+    ranking.appendChild(div);
+  });
+}
+
+showChoices();
+
+</script>
 
 </body>
 </html>
+  
